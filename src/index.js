@@ -40,9 +40,25 @@ const action = addTodo('Use redux')
 
 
 // Attempt 2: wrap the logger logic into a function
-function dispatchAndLog(store, action) {
-  console.log('dispatching', action)
-  store.dispatch(action)
-  console.log('next state', store.getState())
+// function dispatchAndLog(store, action) {
+//   console.log('dispatching', action)
+//   store.dispatch(action)
+//   console.log('next state', store.getState())
+// }
+// dispatchAndLog(store, action)
+
+
+// Attempt 3: Monkeypatching dispatch
+function patchDispatchAndLog(store) {
+  const next = store.dispatch
+  store.dispatch = function dispatchAndLog(action) {
+    console.log('dispatching', action)
+    let result = next(action)
+    console.log('next state', store.getState())
+    return result
+  }
 }
-dispatchAndLog(store, action)
+
+
+patchDispatchAndLog(store)
+store.dispatch(addTodo('patch dispatch and log'))
