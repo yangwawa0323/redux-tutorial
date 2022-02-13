@@ -1,57 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { applyMiddleware } from 'redux';
+
+
+import logger  from 'redux-logger';
 
 import {
   createStore,
-  compose,
-  applyMiddleware,
-  bindActionCreators,
-  combineReducers,
+
 } from 'redux'
 
 
-import thunk from 'redux-thunk';
+// import thunk from 'redux-thunk';
 
-import logger from 'redux-logger';
+// import logger from 'redux-logger';
 
-const initialState = {
-  users: [
-    { id: 1, name: 'yangwawa' },
-    { id: 2, name: 'Eric' }
-  ],
-  tasks: [
-    { title: 'File the TPS reports' },
-    { title: 'Order more energy drink' }
-  ]
-};
+const initialState = { text: 'initial text'}
 
-const ADD_TASK = 'ADD_TASK';
-const ADD_USER = 'ADD_USER';
+// simple todo reducer
+const todoReducer = (state = initialState) => state
 
-// pass the title object { title }
-const addTask = (title) => ({ type: ADD_TASK, payload:  title  });
-const addUser = (name) => ({ type: ADD_USER, payload:  name  });
 
-const userReducer = (users = initialState.users, action) => {
-  if (action.type === ADD_USER) {
-    return [...users, action.payload ]
-  }
-  return users
-}
+// addTodo return an action
+const addTodo = text => ( { type: "ADD_TODO", text })
 
-const taskReducer = (tasks = initialState.tasks, action) => {
-  if (action.type === ADD_TASK) {
-    return [...tasks, action.payload]
-  }
-  return tasks
-}
+const store = createStore(
+  todoReducer
+  /*, applyMiddleware(logger) */
+)
 
-const reducer = combineReducers({ users: userReducer, tasks: taskReducer })
-  
-const store = createStore(reducer,
-applyMiddleware(logger))
 
-store.dispatch(addTask({ title: 'ride bicycle' }))
-store.dispatch(addUser({ id : 3 , name: 'yangkun'}))
+// Attempt 1: basic logger logic 
+const action = addTodo('Use redux')
+console.log('dispatching', action)
+store.dispatch(action)
+console.log('next state', store.getState())
+
+// Attempt 2: wrap the logger logic into a function
