@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { applyMiddleware } from 'redux';
 
 
-import logger  from 'redux-logger';
+import logger from 'redux-logger';
 
 import {
   createStore,
@@ -15,14 +15,14 @@ import {
 
 // import logger from 'redux-logger';
 
-const initialState = { text: 'initial text'}
+const initialState = { text: 'initial text' }
 
 // simple todo reducer
 const todoReducer = (state = initialState) => state
 
 
 // addTodo return an action
-const addTodo = text => ( { type: "ADD_TODO", text })
+const addTodo = text => ({ type: "ADD_TODO", text })
 
 const store = createStore(
   todoReducer
@@ -30,10 +30,19 @@ const store = createStore(
 )
 
 
-// Attempt 1: basic logger logic 
 const action = addTodo('Use redux')
-console.log('dispatching', action)
-store.dispatch(action)
-console.log('next state', store.getState())
+
+
+// Attempt 1: basic logger logic 
+// console.log('dispatching', action)
+// store.dispatch(action)
+// console.log('next state', store.getState())
+
 
 // Attempt 2: wrap the logger logic into a function
+function dispatchAndLog(store, action) {
+  console.log('dispatching', action)
+  store.dispatch(action)
+  console.log('next state', store.getState())
+}
+dispatchAndLog(store, action)
